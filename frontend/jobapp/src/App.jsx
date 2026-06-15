@@ -12,6 +12,7 @@ import ApplyJob from "./pages/ApplyJob";
 import Applications from "./pages/Applications";
 import AddRecruiter from "./pages/AddRecruiter";
 import DashboardLayout from "./components/DashboardLayout";
+import UpdateJob from "./pages/UpdateJob";
 
 function App() {
 
@@ -44,6 +45,7 @@ function App() {
           <Route path="/apply/:id" element={<ApplyJob />} />
 
           <Route path="/applications" element={<Applications />} />
+          <Route path="/updatejob/:id" element={<UpdateJob />} />
 
         </Route>
 

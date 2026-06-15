@@ -14,40 +14,50 @@ function AddJob() {
     const [description, setDescription] = useState("");
     const [message, setMessage] = useState("");
 
-    const addJob = async (e) => {
-        e.preventDefault();
-        setMessage("");
+   const addJob = async (e) => {
+    e.preventDefault();
+    setMessage("");
 
-        if (
-            !title.trim() ||
-            !company.trim() ||
-            !location.trim() ||
-            !skills.trim() ||
-            !salary ||
-            !description.trim()
-        ) {
-            setMessage("Please fill all job details.");
-            return;
-        }
+    if (
+        !title.trim() ||
+        !company.trim() ||
+        !location.trim() ||
+        !skills.trim() ||
+        !salary ||
+        !description.trim()
+    ) {
+        setMessage("Please fill all job details.");
+        return;
+    }
 
-        try {
-            await API.post(`/user/addjob/${user.role}`, {
+    try {
+        const response = await fetch("http://localhost:5000/api/jobs", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
                 title,
                 company,
                 location,
-                skills,
-                salary: Number(salary),
+                skills: skills.split(",").map(skill => skill.trim()),
+                salary,
                 description
-            });
+            })
+        });
 
-            setMessage("Job added successfully.");
-            navigate("/jobs");
-
-        } catch (error) {
-            console.log(error);
-            setMessage("Unable to add job.");
+        if (!response.ok) {
+            throw new Error("Failed to add job");
         }
-    };
+
+        setMessage("Job added successfully.");
+        navigate("/jobs");
+
+    } catch (error) {
+        console.error(error);
+        setMessage("Unable to add job.");
+    }
+};
 
     return (
         <div>

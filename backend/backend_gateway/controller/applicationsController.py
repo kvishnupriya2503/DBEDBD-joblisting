@@ -1,6 +1,5 @@
 from fastapi import APIRouter
 from models.schemas import ApplicationSchema
-
 import httpx
 
 router = APIRouter(prefix="/applicationservice")
@@ -8,26 +7,26 @@ router = APIRouter(prefix="/applicationservice")
 SPRING_URL = "http://localhost:8005/"
 
 
-@router.post("/applyjob")
-async def apply_job(application: ApplicationSchema):
+@router.post("/applyjob/{role}")
+async def apply_job(role: int, application: ApplicationSchema):
 
     async with httpx.AsyncClient() as client:
 
         response = await client.post(
-            SPRING_URL + "user/applyjob",
+            SPRING_URL + f"user/applyjob/{role}",
             json=application.model_dump()
         )
 
     return response.json()
 
 
-@router.get("/allapplications")
-async def all_applications():
+@router.get("/allapplications/{role}")
+async def all_applications(role: int):
 
     async with httpx.AsyncClient() as client:
 
         response = await client.get(
-            SPRING_URL + "user/allapplications"
+            SPRING_URL + f"user/allapplications/{role}"
         )
 
     return response.json()
